@@ -1,0 +1,8 @@
+﻿pump_id,pump_station_id,inlet_node,outlet_node,pump_curve,initial_status,startup_depth,shutoff_depth,is_parallel_pump,curve_points,model_version,is_added
+G70F11Pp1,G70F11,G70F11P,G70F100,G70F11Pp1,ON,0.6,0.01,True,"[[""0"", ""0.021""], [""4.6"", ""0.021""]]",original,0
+G71F12Pp1,G71F12,G71F12P,G71F060,G71F12Pp1,ON,0.2,0.1,True,"[[""0"", ""0.015""], [""6.081"", ""0.015""]]",original,0
+G71F12Pp2,G71F12,G71F12P,G71F060,G71F12Pp2,ON,0.25,0.1,True,"[[""0"", ""0.004""], [""6.081"", ""0.004""]]",original,0
+G71F68Yp1,G71F68Y,G71F68Y,G71F060,G71F68Y_tommepst,ON,0.0,0.0,False,"[[""0"", ""0.065""], [""2.16"", ""0.065""], [""3.16"", ""0.08""], [""14.16"", ""0.08""]]",original,0
+G80F13Pp1,G80F13,G80F13P,G80F240,G80F13Pp1,ON,1.331,0.581,False,"[[""0"", ""0.026""], [""7"", ""0.026""]]",original,0
+G70F11Pp2,G70F11,G70F11P,G70F100,G70F11Pp2,ON,0.7,0.01,True,"[[""0"", ""0.011""], [""4.6"", ""0.011""]]",original,0
+G71F320Pp1,G71F320,G71F320,G_ADD,G_ADD_CURVE,ON,0.0,0.0,False,"[[""0.0"", ""0.065""], [""2.16"", ""0.065""], [""3.16"", ""0.08""], [""14.16"", ""0.08""]]",v2,1

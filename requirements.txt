@@ -1,0 +1,4 @@
+pandas>=2.2
+PyYAML>=6.0
+pyswmm>=2.0
+swmm-toolkit>=0.16

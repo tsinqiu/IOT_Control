@@ -1,0 +1,28 @@
+paths:
+  swmm_input: data/raw/swmm/BellingeSWMM_2021_orin_v2.inp
+  rainfall_input: data/raw/rainfall/rg_bellinge_Jun2010_Aug2021.dat
+  csv_dir: data/processed/part1_csv
+  report_dir: outputs/reports/part1
+  log_dir: outputs/logs
+  swmm_run_dir: outputs/swmm_runs
+  interim_dir: data/interim/part1
+  database_dir: database/part1
+  docs_dir: docs/part1
+
+simulation:
+  start_datetime: "2017-06-29 00:00:00"
+  end_datetime: "2017-07-03 23:59:59"
+  raw_sample_step_sec: 60
+  report_step_min: 15
+  target_nodes: []
+
+forecast:
+  hours: 72
+
+pump:
+  efficiency: 0.70
+
+pump_energy:
+  default_efficiency: 0.70
+  default_design_head_m:
+    G71F320Pp1: 2.0

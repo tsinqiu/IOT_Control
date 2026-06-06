@@ -1,0 +1,30 @@
+[JUNCTIONS]
+;;Name           Elevation MaxDepth InitDepth SurDepth Aponded
+J1               1.0       2.5      0         0        0
+
+[STORAGE]
+S1               0.5       3.0      0         TABULAR  C1       0        0
+
+[OUTFALLS]
+O1               0.0       FREE
+G_ADD            10.35     FREE
+
+[COORDINATES]
+J1               10        20
+S1               11        21
+O1               12        22
+G_ADD            13        23
+
+[CONDUITS]
+C1               J1        O1       100       0.01     0        0        0
+
+[XSECTIONS]
+C1               CIRCULAR  1.2      0         0        0        1
+
+[PUMPS]
+G70F11Pp1        S1        O1       PC1       ON       0.6      0.1
+G71F320Pp1       S1        G_ADD    PC1       ON       0        0
+
+[CURVES]
+PC1              PUMP1     0        0
+PC1                       1        2

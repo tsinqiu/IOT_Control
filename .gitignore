@@ -1,0 +1,38 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+
+# Generated SWMM run artifacts
+outputs/swmm_runs/
+outputs/logs/
+outputs/figures/
+*.out
+*.rpt
+
+# Database backups should be shared outside Git or via release artifacts
+*.bak
+
+# Test scratch outputs
+tests/_tmp*/
+tests/**/_tmp*/
+tests/_tmp*
+
+# Duplicated source package kept only as a local reference copy
+丹麦小镇城市排水模型/
