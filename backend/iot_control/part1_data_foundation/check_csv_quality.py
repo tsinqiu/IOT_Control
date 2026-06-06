@@ -176,7 +176,8 @@ def _check_time_series(tables: dict[str, pd.DataFrame], result: CheckResult) -> 
             max_gap = frame.assign(_ts=times).sort_values([object_col, "_ts"]).groupby(object_col)["_ts"].diff().dt.total_seconds().div(60).max()
         else:
             max_gap = times.sort_values().diff().dt.total_seconds().div(60).max()
-        limit = 1.5 if name.startswith("raw_") else 15
+        config = load_config()
+        limit = (config.raw_sample_step_sec / 60.0 * 1.5) if name.startswith("raw_") else 15
         if pd.notna(max_gap) and max_gap > limit:
             level = "WARN" if name == "rainfall_observed" else "ERROR"
             _message(result, level, f"{name}.csv max time gap is {max_gap:.1f} min")
@@ -488,7 +489,14 @@ def run_quality_check(
     result = CheckResult(report_path=report_path)
 
     tables = _check_inventory(csv_dir, REQUIRED_FILES, result)
-    tables.update(_check_inventory(config.interim_dir, INTERIM_FILES, result, interim=True))
+    interim_files = [
+        file_name
+        for file_name in INTERIM_FILES
+        if file_name != "raw_node_timeseries.csv" or config.save_raw_node_timeseries
+    ]
+    tables.update(_check_inventory(config.interim_dir, interim_files, result, interim=True))
+    if not config.save_raw_node_timeseries:
+        _message(result, "OK", "Skipped raw_node_timeseries.csv by configuration")
     _check_added_objects(tables, result)
     ranges = _check_time_series(tables, result)
     _check_aggregated_node_fields(tables, result)

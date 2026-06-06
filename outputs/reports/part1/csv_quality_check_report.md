@@ -32,29 +32,27 @@
 | --- | ---: | ---: | ---: | --- |
 | conduit_info.csv | 1015 | 16 | 3039 |  |
 | facility_info.csv | 33 | 10 | 67 |  |
-| gate_operation_timeseries.csv | 11040 | 8 | 0 | 2017-06-29 00:00:00 to 2017-07-03 23:45:00 |
+| gate_operation_timeseries.csv | 11017 | 8 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
 | node_info.csv | 1021 | 14 | 56 |  |
-| node_level_timeseries.csv | 10560 | 13 | 0 | 2017-06-29 00:00:00 to 2017-07-03 23:45:00 |
-| pump_energy_timeseries.csv | 3360 | 13 | 0 | 2017-06-29 00:00:00 to 2017-07-03 23:45:00 |
+| node_level_timeseries.csv | 489059 | 13 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
+| pump_energy_timeseries.csv | 3353 | 13 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
 | pump_info.csv | 7 | 12 | 0 |  |
-| pump_operation_timeseries.csv | 3360 | 13 | 0 | 2017-06-29 00:00:00 to 2017-07-03 23:45:00 |
-| pump_station_level_timeseries.csv | 2400 | 7 | 0 | 2017-06-29 00:00:00 to 2017-07-03 23:45:00 |
+| pump_operation_timeseries.csv | 3353 | 13 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
+| pump_station_level_timeseries.csv | 2395 | 7 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
 | rainfall_forecast_scenario.csv | 8640 | 6 | 0 | 2017-06-29 00:00:00 to 2017-07-01 23:59:00 |
 | rainfall_observed.csv | 749401 | 5 | 0 | 2009-01-04 14:39:00 to 2021-08-19 00:11:00 |
-| raw_node_timeseries.csv | 158378 | 7 | 0 | 2017-06-29 00:01:00 to 2017-07-03 23:59:00 |
-| raw_pump_timeseries.csv | 50393 | 8 | 0 | 2017-06-29 00:01:00 to 2017-07-03 23:59:00 |
+| raw_pump_timeseries.csv | 3353 | 8 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
 | subcatchment_info.csv | 713 | 14 | 713 |  |
 
 ## 时间对齐与采样检查
 
-- `gate_operation_timeseries`: 2017-06-29 00:00:00 to 2017-07-03 23:45:00
-- `node_level_timeseries`: 2017-06-29 00:00:00 to 2017-07-03 23:45:00
-- `pump_energy_timeseries`: 2017-06-29 00:00:00 to 2017-07-03 23:45:00
-- `pump_operation_timeseries`: 2017-06-29 00:00:00 to 2017-07-03 23:45:00
-- `pump_station_level_timeseries`: 2017-06-29 00:00:00 to 2017-07-03 23:45:00
+- `gate_operation_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
+- `node_level_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
+- `pump_energy_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
+- `pump_operation_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
+- `pump_station_level_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
 - `rainfall_observed`: 2009-01-04 14:39:00 to 2021-08-19 00:11:00
-- `raw_node_timeseries`: 2017-06-29 00:01:00 to 2017-07-03 23:59:00
-- `raw_pump_timeseries`: 2017-06-29 00:01:00 to 2017-07-03 23:59:00
+- `raw_pump_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
 
 ## 新增对象检查
 
@@ -72,29 +70,32 @@
 
 | 节点 | flooding 窗口数 | 最大 flooding_cms_max_15min | flooding 体积 m3 |
 | --- | ---: | ---: | ---: |
-| G70F100 | 17 | 0.061146 | 22.123 |
-| G70F11P | 1 | 0.000050 | 0.003 |
+| G60F070 | 3 | 0.013379 | 26.311 |
+| G70F100 | 1 | 0.035280 | 31.752 |
+| G72F494 | 2 | 0.001961 | 2.640 |
+| G72R160 | 1 | 0.000132 | 0.119 |
+| G72R470 | 1 | 0.000079 | 0.071 |
 
 ## 关键节点风险摘要
 
 | node_id | max depth_m_max | max flooding_cms_max_15min | flooding volume m3 | flooding rows | risk counts |
 | --- | ---: | ---: | ---: | ---: | --- |
-| G71F320 | 2.8556 | 0.000000 | 0.000 | 0 | {'green': 473, 'yellow': 7} |
-| G71F060 | 0.5387 | 0.000000 | 0.000 | 0 | {'green': 480} |
-| G71F68Y | 4.4982 | 0.000000 | 0.000 | 0 | {'green': 480} |
-| G_ADD | 0.0000 | 0.000000 | 0.000 | 0 | {'green': 480} |
+| G71F320 | 2.8055 | 0.000000 | 0.000 | 0 | {'green': 472, 'yellow': 7} |
+| G71F060 | 0.5186 | 0.000000 | 0.000 | 0 | {'green': 479} |
+| G71F68Y | 4.4541 | 0.000000 | 0.000 | 0 | {'green': 479} |
+| G_ADD | 0.0000 | 0.000000 | 0.000 | 0 | {'green': 479} |
 
 ## 关键泵站运行摘要
 
 | pump_id | max flow_cms | avg flow_cms | flow>0 rows | starts | runtime min | cumulative kWh | unit kWh/kt |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| G70F11Pp1 | 0.043416 | 0.002549 | 455 | 39 | 6754.0 | 15.3390 | 15.2726 |
-| G70F11Pp2 | 0.044447 | 0.000508 | 30 | 36 | 245.0 | 2.6471 | 15.0636 |
-| G71F12Pp1 | 0.015000 | 0.000610 | 121 | 200 | 293.0 | 6.1396 | 23.2854 |
-| G71F12Pp2 | 0.004000 | 0.000022 | 5 | 2 | 40.0 | 0.2235 | 23.2862 |
-| G71F68Yp1 | 0.080000 | 0.004080 | 35 | 21 | 402.0 | 22.3576 | 16.3077 |
-| G80F13Pp1 | 0.026000 | 0.004131 | 280 | 375 | 1144.0 | 107.5563 | 60.2963 |
-| G71F320Pp1 | 0.080000 | 0.007383 | 76 | 1 | 7199.0 | 24.8309 | 7.7857 |
+| G70F11Pp1 | 0.035039 | 0.002461 | 447 | 4 | 6705.0 | 14.3544 | 14.9996 |
+| G70F11Pp2 | 0.035039 | 0.000565 | 17 | 7 | 255.0 | 3.0624 | 16.1770 |
+| G71F12Pp1 | 0.015000 | 0.000752 | 24 | 16 | 360.0 | 7.4786 | 23.2812 |
+| G71F12Pp2 | 0.004000 | 0.000025 | 3 | 2 | 45.0 | 0.2538 | 24.1265 |
+| G71F68Yp1 | 0.080000 | 0.004106 | 27 | 3 | 405.0 | 23.0695 | 17.0365 |
+| G80F13Pp1 | 0.026000 | 0.003800 | 70 | 70 | 1050.0 | 99.0222 | 61.3015 |
+| G71F320Pp1 | 0.080000 | 0.007362 | 72 | 1 | 7185.0 | 24.7104 | 7.7857 |
 
 ## 数据库建表脚本检查
 
@@ -128,19 +129,14 @@
 
 ## OK / WARN / ERROR 分类汇总
 
-- OK: 40
-- WARN: 6
+- OK: 38
+- WARN: 1
 - ERROR: 0
 
 ### ERROR
 
 ### WARN
 - rainfall_observed.csv max time gap is 50283.0 min
-- G70F11Pp1 has repeated starts within 30 min
-- G70F11Pp2 has repeated starts within 30 min
-- G71F12Pp1 has repeated starts within 30 min
-- G71F68Yp1 has repeated starts within 30 min
-- G80F13Pp1 has repeated starts within 30 min
 
 ### OK
 - Found rainfall_observed.csv
@@ -155,8 +151,8 @@
 - Found pump_operation_timeseries.csv
 - Found pump_energy_timeseries.csv
 - Found gate_operation_timeseries.csv
-- Exported raw_node_timeseries.csv
 - Exported raw_pump_timeseries.csv
+- Skipped raw_node_timeseries.csv by configuration
 - G71F320Pp1 found in pump_info.csv
 - G_ADD found in node_info/facility_info
 - G71F320Pp1 found in pump_operation_timeseries.csv
@@ -173,8 +169,6 @@
 - gate_operation_timeseries.csv timestamp parses as datetime
 - Time step check passed for gate_operation_timeseries.csv
 - rainfall_observed.csv timestamp parses as datetime
-- raw_node_timeseries.csv timestamp parses as datetime
-- raw sample step passed for raw_node_timeseries.csv
 - raw_pump_timeseries.csv timestamp parses as datetime
 - raw sample step passed for raw_pump_timeseries.csv
 - Rainfall total > 0 during simulation window: 63.393 mm

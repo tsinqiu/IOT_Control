@@ -1,0 +1,11 @@
+paths:
+  input_csv_dir: data/processed/part1_csv
+  output_csv_dir: data/processed/part2_assessment_csv
+
+assessment:
+  report_step_min: 15
+  min_flow_cms: 0.001
+  min_interval_volume_m3: 1.0
+
+api:
+  csv_dir: data/processed/part2_assessment_csv

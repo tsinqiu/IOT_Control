@@ -1,0 +1,5 @@
+﻿scenario_id,display_name,start_datetime,duration_min,total_rainfall_mm,peak_minute_rainfall_mm,csv_file,dat_file
+light_rain,小雨,2017-06-29 00:00:00,1440,8.0,0.00556,light_rain.csv,light_rain.dat
+moderate_rain,中雨,2017-06-29 00:00:00,720,20.0,0.04514,moderate_rain.csv,moderate_rain.dat
+heavy_rain,大雨,2017-06-29 00:00:00,360,45.0,0.38701,heavy_rain.csv,heavy_rain.dat
+short_intense_rain,短历时强降雨,2017-06-29 00:00:00,60,30.0,1.80359,short_intense_rain.csv,short_intense_rain.dat

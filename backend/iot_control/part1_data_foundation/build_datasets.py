@@ -86,6 +86,8 @@ def build_all(config: PipelineConfig) -> dict[str, Any]:
         pump_efficiency=config.pump_efficiency,
         default_design_head_m=config.default_design_head_m,
         target_nodes=config.target_nodes,
+        save_raw_node_timeseries=config.save_raw_node_timeseries,
+        raw_node_output_path=config.interim_dir / "raw_node_timeseries.csv",
     )
 
     csv_tables = {
@@ -94,10 +96,19 @@ def build_all(config: PipelineConfig) -> dict[str, Any]:
         **static_tables,
         **{name: frame for name, frame in dynamic_tables.items() if name != "simulation_note" and not name.startswith("raw_")},
     }
-    interim_paths = write_interim_tables(
-        {name: frame for name, frame in dynamic_tables.items() if name.startswith("raw_")},
-        config.interim_dir,
-    )
+    raw_tables = {name: frame for name, frame in dynamic_tables.items() if name.startswith("raw_")}
+    all_node_mode = "*" in config.target_nodes
+    raw_node_path = config.interim_dir / "raw_node_timeseries.csv"
+    if all_node_mode:
+        raw_tables.pop("raw_node_timeseries", None)
+        if not config.save_raw_node_timeseries and raw_node_path.exists():
+            try:
+                raw_node_path.unlink()
+            except PermissionError:
+                pass
+    interim_paths = write_interim_tables(raw_tables, config.interim_dir)
+    if all_node_mode and config.save_raw_node_timeseries and raw_node_path.exists():
+        interim_paths["raw_node_timeseries"] = raw_node_path
     csv_paths = write_csv_tables(csv_tables, config.csv_dir)
     write_schema(config.database_dir)
     write_quality_reports(csv_tables, rainfall_stats, simulation_status, config.report_dir, config.docs_dir)

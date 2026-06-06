@@ -12,9 +12,10 @@ paths:
 simulation:
   start_datetime: "2017-06-29 00:00:00"
   end_datetime: "2017-07-03 23:59:59"
-  raw_sample_step_sec: 60
+  raw_sample_step_sec: 900
   report_step_min: 15
-  target_nodes: []
+  target_nodes: ["*"]
+  save_raw_node_timeseries: false
 
 forecast:
   hours: 72

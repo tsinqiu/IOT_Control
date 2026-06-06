@@ -100,6 +100,8 @@ def run_or_fallback(
     pump_efficiency: float,
     default_design_head_m: dict[str, float] | None = None,
     target_nodes: list[str] | None = None,
+    save_raw_node_timeseries: bool = True,
+    raw_node_output_path: Path | None = None,
 ) -> tuple[dict[str, pd.DataFrame], dict[str, Any]]:
     try:
         dynamic = run_pyswmm(
@@ -114,6 +116,8 @@ def run_or_fallback(
             pump_efficiency=pump_efficiency,
             default_design_head_m=default_design_head_m or {},
             target_nodes=target_nodes,
+            save_raw_node_timeseries=save_raw_node_timeseries,
+            raw_node_output_path=raw_node_output_path,
         )
         return dynamic, {"swmm_status": "success", "message": "PySWMM simulation completed."}
     except Exception as exc:
@@ -133,6 +137,8 @@ def run_pyswmm(
     pump_efficiency: float,
     default_design_head_m: dict[str, float] | None = None,
     target_nodes: list[str] | None = None,
+    save_raw_node_timeseries: bool = True,
+    raw_node_output_path: Path | None = None,
 ) -> dict[str, pd.DataFrame]:
     from pyswmm import Links, Nodes, Simulation
 
@@ -145,10 +151,45 @@ def run_pyswmm(
     ] if not facility_info.empty else pd.DataFrame()
     default_design_head_m = default_design_head_m or {}
     node_ids = _default_sample_node_ids(node_info, pump_info, target_nodes)
+    all_nodes_mode = bool(target_nodes and "*" in target_nodes)
+    raw_node_output_path = raw_node_output_path if save_raw_node_timeseries else None
+    if raw_node_output_path is not None:
+        raw_node_output_path.parent.mkdir(parents=True, exist_ok=True)
+        if raw_node_output_path.exists():
+            raw_node_output_path.unlink()
+    pump_related_node_ids = set()
+    for column in ["inlet_node", "outlet_node"]:
+        if column in pump_info.columns:
+            pump_related_node_ids.update(pump_info[column].dropna().astype(str))
 
     node_rows: list[dict[str, Any]] = []
+    node_window_rows: list[dict[str, Any]] = []
+    node_level_chunks: list[pd.DataFrame] = []
+    current_node_window: pd.Timestamp | None = None
     pump_rows: list[dict[str, Any]] = []
     link_rows: list[dict[str, Any]] = []
+
+    def flush_node_window() -> None:
+        nonlocal node_window_rows
+        if not node_window_rows:
+            return
+        chunk = aggregate_node_timeseries(
+            pd.DataFrame(node_window_rows),
+            node_info.reset_index(drop=True),
+            report_step_min,
+            raw_sample_step_sec,
+        )
+        if not chunk.empty:
+            node_level_chunks.append(chunk)
+        if raw_node_output_path is not None:
+            pd.DataFrame(node_window_rows).to_csv(
+                raw_node_output_path,
+                mode="a",
+                header=not raw_node_output_path.exists(),
+                index=False,
+                encoding="utf-8-sig",
+            )
+        node_window_rows = []
 
     with _working_directory(run_dir), Simulation(run_inp.name) as sim:
         sim.step_advance(raw_sample_step_sec)
@@ -156,6 +197,11 @@ def run_pyswmm(
         links = Links(sim)
         for _ in sim:
             timestamp = pd.Timestamp(sim.current_time)
+            node_window = timestamp.floor(f"{report_step_min}min")
+            if all_nodes_mode and current_node_window is not None and node_window != current_node_window:
+                flush_node_window()
+            if all_nodes_mode:
+                current_node_window = node_window
             for node_id in node_ids:
                 if node_id not in node_info.index:
                     continue
@@ -169,17 +215,21 @@ def run_pyswmm(
                     inflow = float(getattr(node, "total_inflow", 0.0) or 0.0)
                 except Exception:
                     pass
-                node_rows.append(
-                    {
-                        "timestamp": timestamp,
-                        "node_id": node_id,
-                        "node_type": static["node_type"],
-                        "depth_m": depth,
-                        "head_m": head,
-                        "flooding_cms": flooding,
-                        "total_inflow_cms": inflow,
-                    }
-                )
+                row = {
+                    "timestamp": timestamp,
+                    "node_id": node_id,
+                    "node_type": static["node_type"],
+                    "depth_m": depth,
+                    "head_m": head,
+                    "flooding_cms": flooding,
+                    "total_inflow_cms": inflow,
+                }
+                if all_nodes_mode:
+                    node_window_rows.append(row)
+                    if node_id in pump_related_node_ids:
+                        node_rows.append(row)
+                else:
+                    node_rows.append(row)
 
             for _, pump in pump_info.iterrows():
                 flow = setting = 0.0
@@ -226,17 +276,32 @@ def run_pyswmm(
                     }
                 )
 
+    if all_nodes_mode:
+        flush_node_window()
+
     raw_nodes = pd.DataFrame(node_rows)
     raw_pumps = pd.DataFrame(pump_rows)
     raw_links = pd.DataFrame(link_rows)
-    node_level = aggregate_node_timeseries(raw_nodes, node_info.reset_index(drop=True), report_step_min, raw_sample_step_sec)
+    if all_nodes_mode:
+        node_level = (
+            pd.concat(node_level_chunks, ignore_index=True)
+            if node_level_chunks
+            else aggregate_node_timeseries(pd.DataFrame(), node_info.reset_index(drop=True), report_step_min, raw_sample_step_sec)
+        )
+    else:
+        node_level = aggregate_node_timeseries(raw_nodes, node_info.reset_index(drop=True), report_step_min, raw_sample_step_sec)
     pump_operation = aggregate_pump_operation(raw_pumps, report_step_min, raw_sample_step_sec)
     pump_energy = aggregate_pump_energy(raw_pumps, raw_nodes, pump_info, report_step_min, pump_efficiency, default_design_head_m)
     pump_station_levels = aggregate_pump_station_levels(raw_nodes, pump_info, node_info.reset_index(drop=True), report_step_min)
     gate_operation = _aggregate_gate_operation(raw_links, controllable_facilities, report_step_min)
+    output_raw_nodes = raw_nodes
+    if all_nodes_mode and not save_raw_node_timeseries:
+        output_raw_nodes = pd.DataFrame(
+            columns=["timestamp", "node_id", "node_type", "depth_m", "head_m", "flooding_cms", "total_inflow_cms"]
+        )
 
     return {
-        "raw_node_timeseries": raw_nodes,
+        "raw_node_timeseries": output_raw_nodes,
         "raw_pump_timeseries": raw_pumps,
         "raw_link_timeseries": raw_links,
         "node_level_timeseries": node_level,

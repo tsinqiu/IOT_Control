@@ -30,6 +30,7 @@ class PipelineConfig:
     pump_efficiency: float
     default_design_head_m: dict[str, float]
     target_nodes: list[str]
+    save_raw_node_timeseries: bool
 
 
 def _resolve(root: Path, value: str) -> Path:
@@ -50,6 +51,9 @@ def load_config(path: str | Path | None = None) -> PipelineConfig:
     pump = data.get("pump", {})
     pump_energy = data.get("pump_energy", {})
 
+    target_nodes = list(simulation.get("target_nodes", []))
+    save_raw_default = False if "*" in target_nodes else True
+
     return PipelineConfig(
         project_root=root,
         swmm_input=_resolve(root, paths.get("swmm_input", "data/raw/swmm/BellingeSWMM_2021_orin.inp")),
@@ -68,7 +72,8 @@ def load_config(path: str | Path | None = None) -> PipelineConfig:
         forecast_hours=int(forecast.get("hours", 72)),
         pump_efficiency=float(pump_energy.get("default_efficiency", pump.get("efficiency", 0.70))),
         default_design_head_m={key: float(value) for key, value in dict(pump_energy.get("default_design_head_m", {})).items()},
-        target_nodes=list(simulation.get("target_nodes", [])),
+        target_nodes=target_nodes,
+        save_raw_node_timeseries=bool(simulation.get("save_raw_node_timeseries", save_raw_default)),
     )
 
 

@@ -41,8 +41,7 @@
 | pump_station_level_timeseries.csv | 1 | 4 | 0 | 2012-06-29 00:01:00 to 2012-06-29 00:01:00 |
 | rainfall_forecast_scenario.csv | 1 | 6 | 0 | 2012-06-29 00:01:00 to 2012-06-29 00:01:00 |
 | rainfall_observed.csv | 1 | 5 | 0 | 2012-06-29 00:01:00 to 2012-06-29 00:01:00 |
-| raw_node_timeseries.csv | 158378 | 7 | 0 | 2017-06-29 00:01:00 to 2017-07-03 23:59:00 |
-| raw_pump_timeseries.csv | 50393 | 8 | 0 | 2017-06-29 00:01:00 to 2017-07-03 23:59:00 |
+| raw_pump_timeseries.csv | 3353 | 8 | 0 | 2017-06-29 00:15:00 to 2017-07-03 23:45:00 |
 | subcatchment_info.csv | 1 | 1 | 0 |  |
 
 ## 时间对齐与采样检查
@@ -53,8 +52,7 @@
 - `pump_operation_timeseries`: 2012-06-29 00:01:00 to 2012-06-29 00:01:00
 - `pump_station_level_timeseries`: 2012-06-29 00:01:00 to 2012-06-29 00:01:00
 - `rainfall_observed`: 2012-06-29 00:01:00 to 2012-06-29 00:01:00
-- `raw_node_timeseries`: 2017-06-29 00:01:00 to 2017-07-03 23:59:00
-- `raw_pump_timeseries`: 2017-06-29 00:01:00 to 2017-07-03 23:59:00
+- `raw_pump_timeseries`: 2017-06-29 00:15:00 to 2017-07-03 23:45:00
 
 ## 新增对象检查
 
@@ -113,7 +111,7 @@
 
 ## OK / WARN / ERROR 分类汇总
 
-- OK: 37
+- OK: 35
 - WARN: 0
 - ERROR: 33
 
@@ -167,8 +165,8 @@
 - Found pump_operation_timeseries.csv
 - Found pump_energy_timeseries.csv
 - Found gate_operation_timeseries.csv
-- Exported raw_node_timeseries.csv
 - Exported raw_pump_timeseries.csv
+- Skipped raw_node_timeseries.csv by configuration
 - G71F320Pp1 found in pump_info.csv
 - G_ADD found in node_info/facility_info
 - G71F320Pp1 found in pump_operation_timeseries.csv
@@ -186,8 +184,6 @@
 - Time step check passed for gate_operation_timeseries.csv
 - rainfall_observed.csv timestamp parses as datetime
 - Time step check passed for rainfall_observed.csv
-- raw_node_timeseries.csv timestamp parses as datetime
-- raw sample step passed for raw_node_timeseries.csv
 - raw_pump_timeseries.csv timestamp parses as datetime
 - raw sample step passed for raw_pump_timeseries.csv
 - Rainfall total > 0 during simulation window: 1.000 mm
