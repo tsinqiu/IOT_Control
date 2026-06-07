@@ -105,18 +105,21 @@ def _range_summary(energy: pd.DataFrame, health: pd.DataFrame, overflow: pd.Data
     overflow_range = _filter_time_range(overflow, range_name, latest)
     latest_time = _latest_timestamp(energy_range, health_range, overflow_range)
 
-    red_energy_count = int(
-        energy_range.loc[energy_range["energy_grade"].astype(str) == "red", "pump_id"].nunique()
-    ) if not energy_range.empty else 0
-    orange_energy_count = int(
-        energy_range.loc[energy_range["energy_grade"].astype(str) == "orange", "pump_id"].nunique()
-    ) if not energy_range.empty else 0
+    if not energy_range.empty:
+        energy_worst = energy_range.groupby("pump_id")["energy_grade"].apply(_worst_grade)
+        red_energy_count = int((energy_worst == "red").sum())
+        orange_energy_count = int((energy_worst == "orange").sum())
+    else:
+        red_energy_count = 0
+        orange_energy_count = 0
     low_health_pump_count = int(
         health_range.loc[pd.to_numeric(health_range.get("health_score"), errors="coerce") < 70, "pump_id"].nunique()
     ) if not health_range.empty else 0
-    red_overflow_node_count = int(
-        overflow_range.loc[overflow_range["risk_grade"].astype(str) == "red", "node_id"].nunique()
-    ) if not overflow_range.empty else 0
+    if not overflow_range.empty:
+        overflow_worst = overflow_range.groupby("node_id")["risk_grade"].apply(_worst_grade)
+        red_overflow_node_count = int((overflow_worst == "red").sum())
+    else:
+        red_overflow_node_count = 0
 
     top_energy_pump = ""
     if not energy_range.empty:

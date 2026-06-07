@@ -4,6 +4,7 @@
       <span>{{ title }}</span>
       <StatusPill :grade="grade" />
     </div>
+    <small v-if="scopeLabel" class="metric-scope">{{ scopeLabel }}</small>
     <strong>{{ value }}</strong>
     <p>{{ detail }}</p>
   </section>
@@ -18,5 +19,6 @@ defineProps<{
   value: string | number;
   detail: string;
   grade: Grade;
+  scopeLabel?: string;
 }>();
 </script>

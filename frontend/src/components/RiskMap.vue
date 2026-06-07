@@ -1,10 +1,10 @@
 <template>
   <div class="risk-map">
     <div class="map-head">
-      <span>关键节点风险分布</span>
+      <span>全管网节点风险分布</span>
       <small>{{ nodes.length }} 个节点</small>
     </div>
-    <svg viewBox="0 0 680 360" role="img" aria-label="关键节点风险分布散点图">
+    <svg viewBox="0 0 680 360" role="img" aria-label="全管网节点风险分布散点图">
       <rect x="0" y="0" width="680" height="360" rx="8" class="map-bg" />
       <g class="grid-lines">
         <line v-for="x in [80, 200, 320, 440, 560]" :key="`x-${x}`" :x1="x" y1="28" :x2="x" y2="332" />
@@ -43,24 +43,30 @@ const points = computed(() => {
   const valid = props.nodes.filter(
     (node) => Number.isFinite(Number(node.x_coord)) && Number.isFinite(Number(node.y_coord)),
   );
+  if (!valid.length) {
+    return [];
+  }
   const xs = valid.map((node) => Number(node.x_coord));
   const ys = valid.map((node) => Number(node.y_coord));
-  const minX = Math.min(...xs, 0);
-  const maxX = Math.max(...xs, 1);
-  const minY = Math.min(...ys, 0);
-  const maxY = Math.max(...ys, 1);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
   const xRange = maxX - minX || 1;
   const yRange = maxY - minY || 1;
-  return valid.map((node) => {
-    const score = Number(node.overflow_risk_score ?? 0);
-    return {
-      node_id: node.node_id,
-      cx: 44 + ((Number(node.x_coord) - minX) / xRange) * 592,
-      cy: 328 - ((Number(node.y_coord) - minY) / yRange) * 292,
-      radius: 4 + Math.min(10, score * 12),
-      gradeClass: gradeClass(node.risk_grade),
-      scoreText: fmt(score, 2),
-    };
-  });
+  return valid
+    .map((node) => {
+      const score = Number(node.overflow_risk_score ?? 0);
+      return {
+        node_id: node.node_id,
+        cx: 44 + ((Number(node.x_coord) - minX) / xRange) * 592,
+        cy: 328 - ((Number(node.y_coord) - minY) / yRange) * 292,
+        radius: 4 + Math.min(10, score * 12),
+        gradeClass: gradeClass(node.risk_grade),
+        score,
+        scoreText: fmt(score, 2),
+      };
+    })
+    .sort((a, b) => a.score - b.score);
 });
 </script>

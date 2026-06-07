@@ -69,7 +69,10 @@ button {
 .chart-title small,
 .map-head small,
 .section-head p,
-.timestamp span {
+.timestamp span,
+.timestamp small,
+.metric-scope,
+.table-footnote {
   color: #64748b;
 }
 
@@ -188,6 +191,12 @@ h2 {
   text-align: right;
 }
 
+.timestamp small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
 .screen-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -219,7 +228,7 @@ h2 {
 }
 
 .metric-tile strong {
-  margin-top: 18px;
+  margin-top: 14px;
   font-size: 26px;
   line-height: 1.1;
 }
@@ -227,6 +236,12 @@ h2 {
 .metric-tile p {
   margin-top: 8px;
   font-size: 14px;
+}
+
+.metric-scope {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
 }
 
 .panel {
@@ -250,6 +265,16 @@ h2 {
 
 .section-head {
   margin-bottom: 16px;
+}
+
+.section-note {
+  font-size: 13px;
+}
+
+.table-footnote {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .section-head.compact {
