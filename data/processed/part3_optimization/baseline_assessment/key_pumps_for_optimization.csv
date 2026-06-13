@@ -1,0 +1,8 @@
+﻿pump_id,inlet_node,outlet_node,total_energy_kwh,total_startup_count,total_on_seconds,reason
+G70F11Pp1,G70F11P,G70F100,10.693687569720378,2,407700.0,all_pumps_retained_for_optimization
+G70F11Pp2,G70F11P,G70F100,3.823096798900579,3,22500.0,all_pumps_retained_for_optimization
+G71F12Pp1,G71F12P,G71F060,6.083653205321118,9,17100.0,all_pumps_retained_for_optimization
+G71F12Pp2,G71F12P,G71F060,0.5086342586824921,2,5400.0,all_pumps_retained_for_optimization
+G71F320Pp1,G71F320,G_ADD,31.139380027644748,1,431100.0,all_pumps_retained_for_optimization
+G71F68Yp1,G71F68Y,G71F060,15.481098216156804,5,18000.0,all_pumps_retained_for_optimization
+G80F13Pp1,G80F13P,G80F240,73.57242411330957,49,46800.0,all_pumps_retained_for_optimization
